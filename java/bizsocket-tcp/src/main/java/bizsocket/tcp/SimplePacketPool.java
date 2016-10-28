@@ -15,19 +15,21 @@ public class SimplePacketPool implements PacketPool {
 
     @Override
     public Packet pull() {
-        Entity entity = null;
-        for (Entity e : queue) {
-            if (e.isEnable()) {
-                entity = e;
-                break;
+        synchronized (queue) {
+            Entity entity = null;
+            for (Entity e : queue) {
+                if (e.isEnable()) {
+                    entity = e;
+                    break;
+                }
             }
-        }
-        if (entity != null) {
-            queue.remove(entity);
-            Packet packet = entity.packet;
-            packet.setFlags(packet.getFlags() & ~Packet.FLAG_RECYCLED);
-            packet.onPrepareReuse();
-            return packet;
+            if (entity != null) {
+                queue.remove(entity);
+                Packet packet = entity.packet;
+                packet.setFlags(packet.getFlags() & ~Packet.FLAG_RECYCLED);
+                packet.onPrepareReuse();
+                return packet;
+            }
         }
         return null;
     }
@@ -37,7 +39,9 @@ public class SimplePacketPool implements PacketPool {
         if (queue.size() == QUEUE_SIZE) {
             return;
         }
-        queue.add(new Entity(packet));
+        synchronized (queue) {
+            queue.add(new Entity(packet));
+        }
     }
 
     static class Entity {
