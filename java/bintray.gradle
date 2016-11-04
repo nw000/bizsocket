@@ -14,9 +14,14 @@ def licenseUrls = ['http://www.apache.org/licenses/LICENSE-2.0.txt']
 def inception = '2016'
 
 Properties props = new Properties()
-props.load(project.rootProject.file('local.properties').newDataInputStream())
-def bintray_user = props.getProperty("BINTRAY_USER")
-def bintray_key = props.getProperty("BINTRAY_KEY")
+try {
+    props.load(project.rootProject.file('local.properties').newDataInputStream())
+} catch (Throwable e) {
+
+}
+
+def bintray_user = props.getProperty("BINTRAY_USER","")
+def bintray_key = props.getProperty("BINTRAY_KEY","")
 
 install {
     repositories {
