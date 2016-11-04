@@ -38,7 +38,7 @@ public class RequestQueue implements PacketListener,ConnectionListener {
         prepareContext(context);
         boolean existed = requestContextList.contains(context);
         if (!existed) {
-            if ((context.getFlags() & RequestContext.FLAG_CLEAR_QUOTE) != 0) {
+            if ((context.getFlags() & RequestContext.FLAG_CLEAR_QUEUE) != 0) {
                 removeRequestContexts(requestContextList);
             }
             if ((context.getFlags() & RequestContext.FLAG_NOT_SUPPORT_REPEAT) != 0) {
@@ -54,7 +54,7 @@ public class RequestQueue implements PacketListener,ConnectionListener {
                     return;
                 }
             }
-            if ((context.getFlags() & RequestContext.FLAG_JUMP_QUOTE) != 0) {
+            if ((context.getFlags() & RequestContext.FLAG_JUMP_QUEUE) != 0) {
                 requestContextList.add(0,context);
             }
             else {

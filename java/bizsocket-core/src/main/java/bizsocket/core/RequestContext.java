@@ -26,12 +26,12 @@ public class RequestContext implements ResponseHandler {
     /**
      * 紧急的包需要优先插队执行
      */
-    public static final int FLAG_JUMP_QUOTE = 1 << 3;
+    public static final int FLAG_JUMP_QUEUE = 1 << 3;
 
     /**
      * 写出这个包之前清空队列
      */
-    public static final int FLAG_CLEAR_QUOTE = 1 << 4;
+    public static final int FLAG_CLEAR_QUEUE = 1 << 4;
 
     /**
      * 同一个请求不允许重复出现在队列中
