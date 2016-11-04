@@ -1,6 +1,6 @@
 package bizsocket.core;
 
-import bizsocket.core.cache.RequestContextQueue;
+import bizsocket.core.internal.RequestContextQueue;
 import junit.framework.TestCase;
 import org.junit.Test;
 import java.util.ArrayList;

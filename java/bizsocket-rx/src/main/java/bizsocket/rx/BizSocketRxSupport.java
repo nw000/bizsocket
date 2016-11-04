@@ -10,10 +10,10 @@ import java.lang.reflect.Proxy;
  */
 public class BizSocketRxSupport {
     private final BizSocket bizSocket;
-    private final JSONRequestConverter requestConverter;
-    private final JSONResponseConverter responseConverter;
+    private final RequestConverter requestConverter;
+    private final ResponseConverter responseConverter;
 
-    BizSocketRxSupport(BizSocket bizSocket, JSONRequestConverter requestConverter, JSONResponseConverter responseConverter) {
+    BizSocketRxSupport(BizSocket bizSocket, RequestConverter requestConverter, ResponseConverter responseConverter) {
         this.responseConverter = responseConverter;
         this.bizSocket = bizSocket;
         this.requestConverter = requestConverter;
@@ -23,11 +23,11 @@ public class BizSocketRxSupport {
         return bizSocket;
     }
 
-    public JSONRequestConverter getRequestConverter() {
+    public RequestConverter getRequestConverter() {
         return requestConverter;
     }
 
-    public JSONResponseConverter getResponseConverter() {
+    public ResponseConverter getResponseConverter() {
         return responseConverter;
     }
 
@@ -59,20 +59,20 @@ public class BizSocketRxSupport {
 
     public static class Builder {
         private BizSocket bizSocket;
-        private JSONRequestConverter requestConverter;
-        private JSONResponseConverter responseConverter;
+        private RequestConverter requestConverter;
+        private ResponseConverter responseConverter;
 
         public Builder bizSocket(BizSocket bizSocket) {
             this.bizSocket = bizSocket;
             return this;
         }
 
-        public Builder requestConverter(JSONRequestConverter converter) {
+        public Builder requestConverter(RequestConverter converter) {
             this.requestConverter = converter;
             return this;
         }
 
-        public Builder responseConverter(JSONResponseConverter converter) {
+        public Builder responseConverter(ResponseConverter converter) {
             this.responseConverter = converter;
             return this;
         }

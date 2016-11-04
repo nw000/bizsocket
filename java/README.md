@@ -1,6 +1,7 @@
-#socket连接中断后 再去获取读写流报SocketException
-java.net.SocketException: Socket is closed
-	at java.net.Socket.getOutputStream(Socket.java:943)
-accept: Socket[addr=/127.0.0.1,port=55262,localport=8888]
-	at server.TestServer1.main(TestServer1.java:19)
+#bizsocket
 
+支持一对一请求、通知、串行请求合并、缓存、拦截器
+对rxjava做了支持，提供类似于retrofit的支持
+
+
+compile 'com.dx168.bizsocket:bizsocket-rx:${version}'
