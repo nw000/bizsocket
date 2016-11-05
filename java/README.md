@@ -5,3 +5,5 @@
 
 
 compile 'com.dx168.bizsocket:bizsocket-rx:${version}'
+#版本查询: 
+http://jcenter.bintray.com/com/dx168/bizsocket/
