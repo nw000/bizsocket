@@ -44,6 +44,6 @@ watcher
 PythonTool/output_.DS_Store/
 demo/src/main/res
 local.properties
-common/
+
 outputs
 tmp_file.tmp

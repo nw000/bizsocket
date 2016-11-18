@@ -9,7 +9,6 @@ import bizsocket.tcp.PacketListener;
 import bizsocket.tcp.SocketConnection;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by tong on 16/3/7.
@@ -18,7 +17,7 @@ public class RequestQueue implements PacketListener,ConnectionListener {
     protected final Logger logger = LoggerFactory.getLogger(SocketConnection.class.getSimpleName());
     private final List<RequestContext> requestContextList = new RequestContextQueue();
     private final Set<SerialSignal> serialSignalList = Collections.synchronizedSet(new HashSet<SerialSignal>());
-    private final List<AbstractSerialContext> mSerialContexts = new CopyOnWriteArrayList();
+    private final List<AbstractSerialContext> mSerialContexts = Collections.synchronizedList(new ArrayList<AbstractSerialContext>());
     private final InterceptorChain interceptorChain;
     private final AbstractBizSocket bizSocket;
     private ResponseHandler globalNotifyHandler;
@@ -140,8 +139,15 @@ public class RequestQueue implements PacketListener,ConnectionListener {
             throw new RuntimeException("filter can not be null");
         }
         List<RequestContext> resultList = new ArrayList<RequestContext>();
-        for (int i = 0;i < requestContextList.size();i++) {
-            RequestContext context = requestContextList.get(i);
+//
+//        for (int i = 0;i < requestContextList.size();i++) {
+//            RequestContext context = requestContextList.get(i);
+//            if (filter.filter(context)) {
+//                resultList.add(context);
+//            }
+//        }
+//
+        for (RequestContext context : requestContextList) {
             if (filter.filter(context)) {
                 resultList.add(context);
             }
