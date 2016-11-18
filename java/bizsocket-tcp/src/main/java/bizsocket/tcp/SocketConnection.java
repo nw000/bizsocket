@@ -40,6 +40,18 @@ public abstract class SocketConnection implements Connection, ReconnectionManage
     private Timer timer;
     private int heartbeat = DEFAULT_HEART_BEAT_INTERVAL;//心跳间隔
     private ReconnectionManager reconnectionManager;
+    private Object lock = new Object();
+
+    private final TimerTask timerTask = new TimerTask() {
+        @Override
+        public void run() {
+            Packet packet = packetFactory.getHeartBeatPacket();
+            if (packet == null) {
+                return;
+            }
+            sendPacket(packet);
+        }
+    };
 
     public SocketConnection() {
         this(null,0);
@@ -253,23 +265,18 @@ public abstract class SocketConnection implements Connection, ReconnectionManage
 
     public void startHeartBeat() {
         stopHeartBeat();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                Packet packet = packetFactory.getHeartBeatPacket();
-                if (packet == null) {
-                    return;
-                }
-                sendPacket(packet);
-            }
-        };
-        timer = new Timer();
-        timer.scheduleAtFixedRate(timerTask, 0, heartbeat);
+        synchronized (lock) {
+            timer = new Timer();
+            timer.scheduleAtFixedRate(timerTask, 0, heartbeat);
+        }
     }
 
     private void stopHeartBeat() {
-        if (null != timer) {
-            timer.cancel();
+        synchronized (lock) {
+            if (null != timer) {
+                timer.cancel();
+            }
+            timer = null;
         }
     }
 
