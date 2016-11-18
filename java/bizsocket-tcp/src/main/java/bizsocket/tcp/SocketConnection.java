@@ -42,17 +42,6 @@ public abstract class SocketConnection implements Connection, ReconnectionManage
     private ReconnectionManager reconnectionManager;
     private Object lock = new Object();
 
-    private final TimerTask timerTask = new TimerTask() {
-        @Override
-        public void run() {
-            Packet packet = packetFactory.getHeartBeatPacket();
-            if (packet == null) {
-                return;
-            }
-            sendPacket(packet);
-        }
-    };
-
     public SocketConnection() {
         this(null,0);
     }
@@ -267,7 +256,16 @@ public abstract class SocketConnection implements Connection, ReconnectionManage
         stopHeartBeat();
         synchronized (lock) {
             timer = new Timer();
-            timer.scheduleAtFixedRate(timerTask, 0, heartbeat);
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    Packet packet = packetFactory.getHeartBeatPacket();
+                    if (packet == null) {
+                        return;
+                    }
+                    sendPacket(packet);
+                }
+            }, 0, heartbeat);
         }
     }
 
