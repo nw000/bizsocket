@@ -70,12 +70,7 @@ public abstract class AbstractBizSocket implements Connection,BizSocket {
 
     @Override
     public void cancel(final Object tagOrResponseHandler) {
-        requestQueue.removeRequestContexts(requestQueue.getRequestContext(new RequestQueue.Filter() {
-            @Override
-            public boolean filter(RequestContext context) {
-                return context.getTag() == tagOrResponseHandler || context.getResponseHandler() == tagOrResponseHandler;
-            }
-        }));
+        requestQueue.cancel(tagOrResponseHandler);
     }
 
     @Override

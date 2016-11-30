@@ -11,6 +11,7 @@ public abstract class AbstractSerialContext {
     private long createMillis;
     private final SerialSignal serialSignal;
     private final RequestContext requestContext;
+    private boolean expired;
 
     public AbstractSerialContext(SerialSignal serialSignal, RequestContext requestContext) {
         createMillis = System.currentTimeMillis();
@@ -26,9 +27,13 @@ public abstract class AbstractSerialContext {
         return requestContext;
     }
 
+    public void setExpired(boolean expired) {
+        this.expired = expired;
+    }
+
     //是否过期
     public boolean isExpired() {
-        return System.currentTimeMillis() - createMillis >= EXPIRED_MILLIS;
+        return expired || System.currentTimeMillis() - createMillis >= EXPIRED_MILLIS;
     }
 
     /**

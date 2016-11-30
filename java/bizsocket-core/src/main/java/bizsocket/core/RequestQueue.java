@@ -3,10 +3,7 @@ package bizsocket.core;
 import bizsocket.core.internal.RequestContextQueue;
 import bizsocket.logger.Logger;
 import bizsocket.logger.LoggerFactory;
-import bizsocket.tcp.ConnectionListener;
-import bizsocket.tcp.Packet;
-import bizsocket.tcp.PacketListener;
-import bizsocket.tcp.SocketConnection;
+import bizsocket.tcp.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
@@ -195,7 +192,8 @@ public class RequestQueue implements PacketListener,ConnectionListener {
             for (AbstractSerialContext serialContext : mSerialContexts) {
                 if (serialContext.getSerialSignal().getEntranceCommand() == context.getRequestCommand()
                         && serialContext.getRequestPacketId() != null
-                        && serialContext.getRequestPacketId().equals(packet.getPacketID())) {
+                        && serialContext.getRequestPacketId().equals(packet.getPacketID())
+                        && !serialContext.isExpired()) {
                     return serialContext;
                 }
             }
@@ -373,6 +371,27 @@ public class RequestQueue implements PacketListener,ConnectionListener {
 
     public void setGlobalNotifyHandler(ResponseHandler globalNotifyHandler) {
         this.globalNotifyHandler = globalNotifyHandler;
+    }
+
+    public void cancel(final Object tagOrResponseHandler) {
+        Collection<RequestContext> requestContexts = getRequestContext(new RequestQueue.Filter() {
+            @Override
+            public boolean filter(RequestContext context) {
+                return context.getTag() == tagOrResponseHandler || context.getResponseHandler() == tagOrResponseHandler;
+            }
+        });
+
+        Collection<AbstractSerialContext> abstractSerialContexts = new ArrayList<>();
+        for (RequestContext context : requestContexts) {
+            for (AbstractSerialContext serialContext : mSerialContexts) {
+                if (context == serialContext.getRequestContext()) {
+                    abstractSerialContexts.add(serialContext);
+                    serialContext.setExpired(true);
+                }
+            }
+        }
+        removeRequestContexts(requestContexts);
+        mSerialContexts.removeAll(abstractSerialContexts);
     }
 
     public interface Filter {
