@@ -1,6 +1,6 @@
 # bizsocket
 
-[![license](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/baidao/tinker-manager/master/LICENSE)
+[![license](https://img.shields.io/hexpm/l/plug.svg)](https://raw.githubusercontent.com/baidao/bizsocket/master/LICENSE)
 
 [ ![Download](https://api.bintray.com/packages/typ0520/maven/com.dx168.patchsdk%3Apatchsdk/images/download.svg) ](https://bintray.com/typ0520/maven/com.dx168.bizsocket%3Abizsocket-rx/_latestVersion)
 
