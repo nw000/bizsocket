@@ -212,7 +212,7 @@ public class RequestQueue implements PacketListener,ConnectionListener {
     private void removeExpiredSerialContexts() {
         List<AbstractSerialContext> preDelList = new ArrayList<AbstractSerialContext>();
         for (AbstractSerialContext serialContext : mSerialContexts) {
-            if (serialContext.isExpired()) {
+            if (serialContext != null && serialContext.isExpired()) {
                 preDelList.add(serialContext);
             }
         }
