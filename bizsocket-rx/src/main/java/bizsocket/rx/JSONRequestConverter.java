@@ -58,8 +58,10 @@ public class JSONRequestConverter implements RequestConverter {
                         else if (keyValueStore instanceof JSONObject) {
                             JSONObject jobj = (JSONObject) keyValueStore;
                             JSONArray names = jobj.names();
-                            for (int i = 0;i < names.length();i++) {
-                                obj.put(names.optString(i),jobj.opt(names.optString(i)));
+                            if (names != null) {
+                                for (int i = 0;i < names.length();i++) {
+                                    obj.put(names.optString(i),jobj.opt(names.optString(i)));
+                                }
                             }
                         }
                     }
