@@ -241,8 +241,14 @@ public class RequestQueue implements PacketListener,ConnectionListener {
 
     //获取串行上下文
     private AbstractSerialContext getSerialContext(Packet responsePacket) {
-        for (int i = 0; i < mSerialContexts.size(); i++) {
-            AbstractSerialContext serialContext = mSerialContexts.get(i);
+//        for (int i = 0; i < mSerialContexts.size(); i++) {
+//            AbstractSerialContext serialContext = mSerialContexts.get(i);
+//            if (serialContext != null && serialContext.shouldProcess(this,responsePacket)) {
+//                return serialContext;
+//            }
+//        }
+
+        for (AbstractSerialContext serialContext : mSerialContexts) {
             if (serialContext != null && serialContext.shouldProcess(this,responsePacket)) {
                 return serialContext;
             }
