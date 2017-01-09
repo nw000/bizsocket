@@ -38,7 +38,7 @@ public class RequestContext implements ResponseHandler {
      */
     public static final int FLAG_NOT_SUPPORT_REPEAT = 1 << 5;
 
-    private final Logger logger = LoggerFactory.getLogger(RequestContext.class.getSimpleName());
+    protected final Logger logger = LoggerFactory.getLogger(RequestContext.class.getSimpleName());
 
     private final Request request;
     /**
@@ -56,7 +56,7 @@ public class RequestContext implements ResponseHandler {
     private int flags = FLAG_CHECK_CONNECT_STATUS;
     private OnRequestTimeoutListener onRequestTimeoutListener;
     private Timer timer;
-    private long readTimeout = Configuration.DEFAULT_READ_TIMEOUT;
+    protected long readTimeout = Configuration.DEFAULT_READ_TIMEOUT;
 
     public RequestContext(Request request, Packet requestPacket, ResponseHandler responseHandler) {
         this.request = request;
@@ -114,9 +114,13 @@ public class RequestContext implements ResponseHandler {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                RequestContext.this.onRequestTimeoutListener.onRequestTimeout(RequestContext.this);
+                callRequestTimeout();
             }
         },readTimeout * 1000);
+    }
+
+    protected void callRequestTimeout() {
+        RequestContext.this.onRequestTimeoutListener.onRequestTimeout(RequestContext.this);
     }
 
     public ByteString getRequestBody() {

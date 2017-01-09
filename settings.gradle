@@ -22,4 +22,5 @@ include 'bizsocket-logger'
 include 'bizsocket-tcp'
 include 'bizsocket-core'
 include 'bizsocket-rx'
+include 'bizsocket-android'
 

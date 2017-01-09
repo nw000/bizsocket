@@ -10,7 +10,7 @@ public abstract class PacketFactory {
     private final PacketPool packetPool;
 
     public PacketFactory() {
-        this(new SimplePacketPool());
+        this(new DisabledPacketPool());
     }
 
     public PacketFactory(PacketPool packetPool) {

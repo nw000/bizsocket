@@ -21,7 +21,7 @@ public abstract class AbstractBizSocket implements Connection,BizSocket {
     }
 
     public AbstractBizSocket(Configuration configuration) {
-        this.configuration = configuration;
+        setConfiguration(configuration);
         socketConnection = createSocketConnection(createPacketFactory());
         one2ManyNotifyRouter = createMultiNotifyRouter();
         requestQueue = createRequestQueue(this);
@@ -155,10 +155,14 @@ public abstract class AbstractBizSocket implements Connection,BizSocket {
         if (desc != null && desc.trim().length() > 0) {
             requestPacket.setDescription(desc);
         }
-        RequestContext requestContext = new RequestContext(request,requestPacket,responseHandler);
+        RequestContext requestContext = obtainRequestContext(request,requestPacket,responseHandler);
         requestContext.setFlags(RequestContext.FLAG_CHECK_CONNECT_STATUS);
         requestContext.setReadTimeout(configuration.getReadTimeout());
         return requestContext;
+    }
+
+    protected RequestContext obtainRequestContext(Request request, Packet requestPacket, ResponseHandler responseHandler) {
+        return new RequestContext(request,requestPacket,responseHandler);
     }
 }
 
