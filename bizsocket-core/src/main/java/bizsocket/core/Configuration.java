@@ -125,6 +125,11 @@ public class Configuration {
             return this;
         }
 
+        public Builder logEnable(boolean logEnable) {
+            configuration.setLogEnable(logEnable);
+            return this;
+        }
+
         public Configuration build() {
             if (configuration.readTimeout < 5) {
                 configuration.setReadTimeout(DEFAULT_READ_TIMEOUT);

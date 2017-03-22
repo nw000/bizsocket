@@ -16,9 +16,18 @@ public abstract class AndroidBizSocket extends AbstractBizSocket {
         LoggerFactory.setDefaultLoggerType(AndroidLogger.class);
     }
 
+    public AndroidBizSocket() {
+    }
+
+    public AndroidBizSocket(Configuration configuration) {
+        super(configuration);
+    }
+
     @Override
     public void setConfiguration(Configuration configuration) {
-        AndroidLogger.LOG_ENABLE = configuration.isLogEnable();
+        if (configuration != null) {
+            AndroidLogger.LOG_ENABLE = configuration.isLogEnable();
+        }
         super.setConfiguration(configuration);
     }
 

@@ -14,8 +14,39 @@ public class JSONRequestConverter implements RequestConverter {
     @Override
     public ByteString converter(Method method, Object... args) {
         try {
-            JSONObject obj = new JSONObject();
             Request request = method.getAnnotation(Request.class);
+            Annotation[][] annotationArray = method.getParameterAnnotations();
+            int index = 0;
+            for (Annotation[] annotations : annotationArray) {
+                for (Annotation annotation : annotations) {
+                    if (annotation instanceof Body) {
+                        //ByteString
+                        Object body = args[index];
+                        if (body == null) {
+                            throw new NullPointerException("Body can not be null! method:[" + method.getName() + "] ,param index: " + index);
+                        }
+
+                        if (body instanceof ByteString) {
+                            return (ByteString) body;
+                        }
+                        else if (body instanceof String) {
+                            return ByteString.encodeUtf8((String)body);
+                        }
+                        else if (body instanceof JSONObject) {
+                            return ByteString.encodeUtf8(body.toString());
+                        }
+                        else if (body instanceof JSONArray) {
+                            return ByteString.encodeUtf8(body.toString());
+                        }
+                        else {
+                            throw new IllegalAccessException("Illegal args method:[" + method.getName() + "] ,param index: " + index + " @Body [ByteString、String、JSONObject、JSONArray]");
+                        }
+                    }
+                }
+                index ++;
+            }
+
+            JSONObject obj = new JSONObject();
             String queryString = request.queryString();
             if (queryString != null) {
                 String[] arr = queryString.split("&");
@@ -29,9 +60,7 @@ public class JSONRequestConverter implements RequestConverter {
                     }
                 }
             }
-
-            Annotation[][] annotationArray = method.getParameterAnnotations();
-            int index = 0;
+            index = 0;
             for (Annotation[] annotations : annotationArray) {
                 for (Annotation annotation : annotations) {
                     if (annotation instanceof Query) {
