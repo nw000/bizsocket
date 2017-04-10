@@ -17,7 +17,7 @@ public class Configuration {
     private String logTag = "SocketClient";
     private Configuration actual;
 
-    Configuration() {
+    protected Configuration() {
     }
 
     protected Configuration(int readTimeout, String host, int port, int heartbeat) {
@@ -99,9 +99,13 @@ public class Configuration {
     }
 
     public static class Builder {
-        private Configuration configuration;
+        protected Configuration configuration;
 
         public Builder() {
+            createEmptyConfiguration();
+        }
+
+        protected void createEmptyConfiguration() {
             this.configuration = new Configuration();
         }
 
